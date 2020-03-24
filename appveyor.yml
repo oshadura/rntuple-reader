@@ -1,0 +1,51 @@
+environment:
+    matrix:
+      - PYTHON: "C:\\Python27"
+        PYTHON_VERSION: "2.7.10"
+        PYTHON_ARCH: "32"
+        NUMPY: "numpy==1.13.1"
+  
+      - PYTHON: "C:\\Python27"
+        PYTHON_VERSION: "2.7.10"
+        PYTHON_ARCH: "64"
+        NUMPY: "numpy==1.13.1"
+  
+      - PYTHON: "C:\\Python27"
+        PYTHON_VERSION: "2.7.10"
+        PYTHON_ARCH: "32"
+        NUMPY: "numpy>=1.15"
+  
+      - PYTHON: "C:\\Python27"
+        PYTHON_VERSION: "2.7.10"
+        PYTHON_ARCH: "64"
+        NUMPY: "numpy>=1.15"
+  
+      - PYTHON: "C:\\Python36"
+        PYTHON_VERSION: "3.6.x"
+        PYTHON_ARCH: "32"
+        NUMPY: "numpy==1.13.1"
+  
+      - PYTHON: "C:\\Python36-x64"
+        PYTHON_VERSION: "3.6.x"
+        PYTHON_ARCH: "64"
+        NUMPY: "numpy==1.13.1"
+  
+      - PYTHON: "C:\\Python36"
+        PYTHON_VERSION: "3.6.x"
+        PYTHON_ARCH: "32"
+        NUMPY: "numpy>=1.15"
+  
+      - PYTHON: "C:\\Python36-x64"
+        PYTHON_VERSION: "3.6.x"
+        PYTHON_ARCH: "64"
+        NUMPY: "numpy>=1.15"
+  
+  install:
+    - "SET PATH=%PYTHON%;%PATH%"
+    - "python --version"
+  
+  build_script:
+    - "python -m pip install --upgrade pip"
+    - "python -m pip install %NUMPY%"
+    - "python -m pip install pytest pytest-runner requests"
+    - "python -m pytest -v tests"
