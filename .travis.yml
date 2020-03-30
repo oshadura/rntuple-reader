@@ -44,13 +44,13 @@ install:
   # FIXME: Mamba causes pip install numpy to be extremely slow
   - if [[ "${PYVER}" = pypy* ]]; then
       conda create --quiet --yes -n testenv ${PYVER};
-    elif [ "${PYVER}" = "2.7" ] || [ "${PYVER}" = "3.6" ] || [ "${PYVER}" = "3.7" || [ "${PYVER}" = "3.8" ]; then
+    elif [ "${PYVER}" = "2.7" ] || [ "${PYVER}" = "3.6" ] || [ "${PYVER}" = "3.7"] || [ "${PYVER}" = "3.8" ]; then
       conda create --quiet --yes -n testenv python=${PYVER} pip;
     else
       conda create --quiet --yes -n testenv python=${PYVER};
     fi
   - source activate testenv
-  - if [ "${PYVER}" = "2.7" ] || [ "${PYVER}" = "3.6" ] || [ "${PYVER}" = "3.7" || [ "${PYVER}" = "3.8" ]; then
+  - if [ "${PYVER}" = "2.7" ] || [ "${PYVER}" = "3.6" ] || [ "${PYVER}" = "3.7"] || [ "${PYVER}" = "3.8" ]; then
       conda install --quiet --yes python=${PYVER} pip root;
       source activate testenv;
     fi
@@ -64,7 +64,7 @@ addons:
       - python-setuptools
 
 script:
-  if [ "${PYVER}" = "2.7" ] || [ "${PYVER}" = "3.6" ] || [ "${PYVER}" = "3.7" || [ "${PYVER}" = "3.8" ]; then
+  if [ "${PYVER}" = "2.7" ] || [ "${PYVER}" = "3.6" ] || [ "${PYVER}" = "3.7" ] || [ "${PYVER}" = "3.8" ]; then
     pytest --error-for-skips -v tests;
   else
     pytest -v tests;
