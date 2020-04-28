@@ -48,4 +48,6 @@ environment:
     - "python -m pip install --upgrade pip"
     - "python -m pip install %NUMPY%"
     - "python -m pip install pytest pytest-runner requests"
+# We use uproot as a dependency: we use a rootio layer of uproot
+    - "python -m pip uproot"
     - "python -m pytest -v tests"
