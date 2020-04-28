@@ -1,0 +1,3 @@
+[submodule "lib/uproot"]
+	path = lib/uproot
+	url = https://github.com/scikit-hep/uproot.git
