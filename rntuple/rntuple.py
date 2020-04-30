@@ -4,10 +4,13 @@
 from __future__ import absolute_import, print_function
 
 import os
-import sys
 import re
+import struct
+import sys
 
-from uproot import struct
+import numpy
+import uproot
+import uproot_methods
 
 from rntuple.backend.memmap_backend import MemmapBackend
 
@@ -69,6 +72,7 @@ def open(path, localsource=MemmapBackend.defaults, **options):
         else:
             openfcn = localsource
         #return ROOTMiniFile.read(openfcn(path), **options)
+        print(path)
         return ROOTDirectory.read(openfcn(path), **options)
 
     else:
@@ -106,7 +110,7 @@ class ROOTDirectory(object):
                     raise TypeError("unrecognized options: {0}".format(", ".join(options)))
 
                 # See https://root.cern/doc/master/classTFile.html
-                cursor = Cursor(0)
+                cursor = uproot.source.cursor.Cursor(0)
                 magic, fVersion = cursor.fields(source, ROOTDirectory._format1)
                 if magic != b"root":
                     raise ValueError("not a ROOT file (starts with {0} instead of 'root')\n   in file: {1}".format(repr(magic), source.path))
@@ -138,7 +142,7 @@ class ROOTDirectory(object):
 
                 if read_streamers and fSeekInfo != 0:
                     streamercontext = ROOTDirectory._FileContext(source.path, None, None, streamerclasses, uproot.source.compressed.Compression(fCompress), tfile)
-                    streamerkey = TKey.read(source, Cursor(fSeekInfo), streamercontext, None)
+                    streamerkey = TKey.read(source, uproot.source.cursor.Cursor(fSeekInfo), streamercontext, None)
                     streamerinfos, streamerinfosmap, streamerrules = _readstreamers(streamerkey._source, streamerkey._cursor, streamercontext, None)
                 else:
                     streamerinfos, streamerinfosmap, streamerrules = [], {}, []
@@ -149,10 +153,10 @@ class ROOTDirectory(object):
                 context = ROOTDirectory._FileContext(source.path, streamerinfos, streamerinfosmap, classes, uproot.source.compressed.Compression(fCompress), tfile)
                 context.source = source
 
-                keycursor = Cursor(fBEGIN)
+                keycursor = uproot.source.cursor.Cursor(fBEGIN)
                 mykey = TKey.read(source, keycursor, context, None)
 
-                return ROOTDirectory.read(source, Cursor(fBEGIN + fNbytesName), context, mykey)
+                return ROOTDirectory.read(source, uproot.source.cursor.Cursor(fBEGIN + fNbytesName), context, mykey)
 
             except Exception:
                 source.dismiss()
@@ -176,7 +180,7 @@ class ROOTDirectory(object):
                     out = ROOTDirectory(b"(empty)", context, [])
 
                 else:
-                    subcursor = Cursor(fSeekKeys)
+                    subcursor = uproot.source.cursor.Cursor(fSeekKeys)
                     headerkey = TKey.read(source, subcursor, context, None)
 
                     nkeys = subcursor.field(source, ROOTDirectory._format5)
@@ -990,13 +994,13 @@ class TKey(ROOTObject):
 
         # object size != compressed size means it's compressed
         if self._fObjlen != self._fNbytes - self._fKeylen:
-            self._source = uproot.source.compressed.CompressedSource(context.compression, source, Cursor(self._fSeekKey + self._fKeylen), self._fNbytes - self._fKeylen, self._fObjlen)
-            self._cursor = Cursor(0, origin=-self._fKeylen)
+            self._source = uproot.source.compressed.CompressedSource(context.compression, source, uproot.source.cursor.Cursor(self._fSeekKey + self._fKeylen), self._fNbytes - self._fKeylen, self._fObjlen)
+            self._cursor = uproot.source.cursor.Cursor(0, origin=-self._fKeylen)
 
         # otherwise, it's uncompressed
         else:
             self._source = source
-            self._cursor = Cursor(self._fSeekKey + self._fKeylen, origin=self._fSeekKey)
+            self._cursor = uproot.source.cursor.Cursor(self._fSeekKey + self._fKeylen, origin=self._fSeekKey)
 
         self._context = context
         return self

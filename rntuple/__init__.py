@@ -12,6 +12,10 @@ Basic cheat-sheet
 
 from __future__ import absolute_import
 
+from pkgutil import extend_path
+
+__path__ = extend_path(__path__, __name__)
+
 # high-level entry points
 from rntuple.rntuple import open
 from rntuple.backend.memmap_backend import MemmapBackend
