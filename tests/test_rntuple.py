@@ -12,7 +12,7 @@ class Test(object):
         with pytest.raises(Exception) as execinfo:
             raise Exception('We cant open file!')
         print(os.getcwd())
-        f = rntuple.open("rntuplereader/rntuple/tests/ntpl001_staff.root")
+        f = rntuple.open("tests/ntpl001_staff.root")
         rfile = f["Staff"]
         assert rfile._fVersion == 0
         assert rfile._fSize == 48
