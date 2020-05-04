@@ -18,7 +18,6 @@ __path__ = extend_path(__path__, __name__)
 
 # high-level entry points
 from rntuple.rntuple import open
-from rntuple.backend.memmap_backend import MemmapBackend
 
 # convenient access to the version number
 from rntuple.version import __version__
