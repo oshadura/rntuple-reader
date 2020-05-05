@@ -1,2 +1,3 @@
 numpy
-uproot
+# Has minimal RNTuple support in rootio.py
+uproot>3.11.4
