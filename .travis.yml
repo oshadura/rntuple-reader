@@ -60,6 +60,7 @@ install:
   - pip install pytest-error-for-skips
   #- pip install uproot (there is still no released uproot with RNTuple support)
   - git clone https://github.com/scikit-hep/uproot.git $HOME/uproot
+  - pip install -r $HOME/uproot/requirements.txt
   - export PYTHONPATH=$HOME/uproot
 
 addons:
